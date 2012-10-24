@@ -1767,12 +1767,9 @@ var ConditionalExpression = exports.ConditionalExpression = OperatorExpression.e
 		if (typeIfTrue.equals(typeIfFalse)) {
 			// ok
 			this._type = typeIfTrue;
-		} else if (
-			(typeIfTrue instanceof NullableType) == (typeIfFalse instanceof NullableType)
-			&& Type.isIntegerOrNumber(typeIfTrue.resolveIfNullable())
-			&& Type.isIntegerOrNumber(typeIfFalse.resolveIfNullable())) {
+		} else if (Type.isIntegerOrNumber(typeIfTrue.resolveIfNullable()) && Type.isIntegerOrNumber(typeIfFalse.resolveIfNullable())) {
 			// special case to handle number == integer
-			this._type = typeIfTrue instanceof NullableType ? new NullableType(Type.numberType) : Type.numberType;
+			this._type = (typeIfTrue instanceof NullableType || typeIfFalse instanceof NullableType) ? new NullableType(Type.numberType) : Type.numberType;
 		} else if (this._ifTrueExpr == null
 			&& (typeIfTrue.resolveIfNullable().equals(typeIfFalse)
 				|| (Type.isIntegerOrNumber(typeIfTrue.resolveIfNullable()) && Type.isIntegerOrNumber(typeIfFalse)))) {
